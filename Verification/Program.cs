@@ -17,11 +17,16 @@ Console.WriteLine($"Listed {images.Count} images, {images.Sum(image => image.Siz
 if (!args.Contains("--download-one", StringComparer.Ordinal)) return 0;
 if (images.Count == 0) throw new Exception("No images returned for this public folder.");
 var sample = images.MinBy(image => image.Size)!;
-IReadOnlyList<RemoteImage> one = new[] { sample with { RelativePath = sample.Name } };
+IReadOnlyList<RemoteImage> one = new[] { sample };
 var first = await new ImageDownloader(client).DownloadAsync(source, one, output, 2, null, timeout.Token);
 if (first.Failed != 0 || first.Downloaded + first.Skipped != 1)
     throw new Exception("Live download failed: " + string.Join("; ", first.Errors));
-var localFile = Path.Combine(output, sample.Name);
+var localFile = Directory.EnumerateFiles(output, "*", SearchOption.AllDirectories)
+    .FirstOrDefault(file => !file.EndsWith(".part", StringComparison.OrdinalIgnoreCase) && new FileInfo(file).Length == sample.Size)
+    ?? throw new Exception("Downloaded image is missing from the output tree.");
+var relativeFile = Path.GetRelativePath(output, localFile);
+if (sample.RelativePath.Contains('/') && Path.GetDirectoryName(relativeFile) is "" or null)
+    throw new Exception("Nested folder structure was not preserved.");
 await using (var stream = File.OpenRead(localFile))
 {
     var checksum = Convert.ToHexString(await SHA256.HashDataAsync(stream));
@@ -39,6 +44,7 @@ var evidence = new
     imageCount = images.Count,
     totalBytes = images.Sum(image => image.Size),
     sample = new { sample.Name, sample.Size, sample.Sha256 },
+    relativeFile,
     first,
     second,
     independentSha256 = "passed"
