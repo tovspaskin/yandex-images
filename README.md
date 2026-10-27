@@ -2,6 +2,8 @@
 
 Приложение на C# и Avalonia для скачивания оригиналов изображений из публичных папок Яндекс Диска. Сборки автономные: устанавливать .NET пользователю не нужно.
 
+[Скачать](https://github.com/tovspaskin/yandex-images/releases/latest) · [Автосборки](https://github.com/tovspaskin/yandex-images/actions) · [Исходники](https://github.com/tovspaskin/yandex-images)
+
 ## Запуск
 
 | Система | Архив | Запуск после распаковки |
@@ -11,7 +13,7 @@
 | macOS Intel | `YandexImages-osx-x64.zip` | `YandexImages.app` |
 | macOS Apple Silicon | `YandexImages-osx-arm64.zip` | `YandexImages.app` |
 
-Архивы появляются в **Actions → Build desktop apps → Artifacts** после успешного запуска CI. При отправке тега `v*` workflow также создаёт GitHub Release с архивами и SHA-256. До первого запуска CI наличие сборки для другой ОС не подтверждает её запуск: локально проверяется Windows, проверки Linux и macOS выполняются на родных GitHub runners после отправки репозитория.
+Готовые архивы доступны в [Releases](https://github.com/tovspaskin/yandex-images/releases). Они также появляются в **Actions → Build desktop apps → Artifacts** после успешного запуска CI. При отправке тега `v*` workflow создаёт GitHub Release с архивами и SHA-256. CI собирает приложение, запускает проверки загрузчика и проверяет старт упакованного приложения на Windows, Linux и обеих архитектурах macOS.
 
 macOS-пакет из CI имеет локальную подпись **ad-hoc**, без Developer ID и нотариализации Apple. Gatekeeper может потребовать разрешить запуск через настройки «Конфиденциальность и безопасность». При упаковке macOS на другой системе подпись не создаётся.
 
@@ -44,6 +46,8 @@ cd YandexImages
 Нужен .NET SDK **9.0.310** либо более новый патч той же ветки `9.0.3xx` — настройки находятся в `global.json`. Решение: `YandexImages.sln`; приложение — `App`, загрузчик — `Core`, автономные проверки — `Tests`, необязательная проверка публичной ссылки — `Verification`.
 
 ```powershell
+git clone https://github.com/tovspaskin/yandex-images.git
+cd yandex-images
 dotnet build YandexImages.sln -c Release
 dotnet run --project Tests/YandexImages.Tests.csproj -c Release
 ```
@@ -71,14 +75,7 @@ Workflow `.github/workflows/build.yml` собирает четыре RID, зап
 
 ## Git и GitHub
 
-Исходники можно хранить в Git; результаты сборок и временные файлы исключены через `.gitignore`. Если удалённый репозиторий ещё не подключён, создайте пустой репозиторий GitHub с нужной видимостью и подключите его:
-
-```bash
-git remote add origin https://github.com/OWNER/REPOSITORY.git
-git push -u origin main
-```
-
-Команды предполагают, что локальный репозиторий уже создан и изменения закоммичены. Для выпуска после успешной проверки:
+Исходники находятся в [tovspaskin/yandex-images](https://github.com/tovspaskin/yandex-images). Результаты сборок и временные файлы исключены через `.gitignore`. Для нового выпуска после проверки и обновления версии приложения:
 
 ```bash
 git tag v1.1.0
