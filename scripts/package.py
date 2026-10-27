@@ -15,6 +15,18 @@ import tarfile
 import zipfile
 
 
+def is_macho(path: Path) -> bool:
+    if not path.is_file():
+        return False
+    with path.open("rb") as stream:
+        return stream.read(4) in (
+            b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",
+            b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",
+            b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",
+            b"\xca\xfe\xba\xbf", b"\xbf\xba\xfe\xca",
+        )
+
+
 def zip_tree(source: Path, destination: Path) -> None:
     with zipfile.ZipFile(destination, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
         for path in sorted([source, *source.rglob("*")]):
@@ -68,8 +80,23 @@ def main() -> None:
     if options.rid.startswith("osx-"):
         bundle = package / "YandexImages.app"
         binaries = bundle / "Contents" / "MacOS"
-        shutil.copytree(source, binaries, symlinks=True)
-        (bundle / "Contents" / "Resources").mkdir()
+        resources = bundle / "Contents" / "Resources"
+        binaries.mkdir(parents=True)
+        resources.mkdir()
+        if not is_macho(source / executable):
+            raise ValueError("macOS executable is not Mach-O")
+        # macOS treats every file in MacOS as nested code when sealing the bundle.
+        # Keep native libraries next to the single-file host for its loader; seal
+        # documentation/configuration as resources instead of trying to sign it.
+        for published in sorted(source.iterdir()):
+            native_bundle = published.is_dir() and published.suffix == ".framework" and any(
+                is_macho(child) for child in published.rglob("*")
+            )
+            target = (binaries if is_macho(published) or native_bundle else resources) / published.name
+            if published.is_dir():
+                shutil.copytree(published, target, symlinks=True)
+            else:
+                shutil.copy2(published, target, follow_symlinks=False)
         template = Path(__file__).resolve().parent.parent / "packaging" / "macos" / "Info.plist"
         with template.open("rb") as stream:
             info = plistlib.load(stream)
@@ -85,6 +112,8 @@ def main() -> None:
             for library in sorted(binaries.rglob("*.dylib")):
                 if not library.is_symlink():
                     subprocess.run(["codesign", "--force", "--sign", "-", "--timestamp=none", str(library)], check=True)
+            for framework in sorted(binaries.rglob("*.framework"), key=lambda path: len(path.parts), reverse=True):
+                subprocess.run(["codesign", "--force", "--sign", "-", "--timestamp=none", str(framework)], check=True)
             subprocess.run(["codesign", "--force", "--sign", "-", "--timestamp=none", str(bundle)], check=True)
             subprocess.run(["codesign", "--verify", "--deep", "--strict", "--verbose=2", str(bundle)], check=True)
         else:
