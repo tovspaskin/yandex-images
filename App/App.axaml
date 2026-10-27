@@ -1,0 +1,48 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YandexImages.App" RequestedThemeVariant="Light">
+ <Application.Resources>
+  <SolidColorBrush x:Key="Ink">#22283A</SolidColorBrush>
+  <SolidColorBrush x:Key="Muted">#6F7788</SolidColorBrush>
+  <SolidColorBrush x:Key="Accent">#5452DC</SolidColorBrush>
+ </Application.Resources>
+ <Application.Styles>
+  <FluentTheme />
+  <Style Selector="Window">
+   <Setter Property="FontSize" Value="14" />
+   <Setter Property="Foreground" Value="{StaticResource Ink}" />
+   <Setter Property="Background" Value="#F4F5FA" />
+  </Style>
+  <Style Selector="Button">
+   <Setter Property="Padding" Value="18,11" />
+   <Setter Property="CornerRadius" Value="8" />
+   <Setter Property="Cursor" Value="Hand" />
+   <Setter Property="FontWeight" Value="SemiBold" />
+   <Setter Property="HorizontalContentAlignment" Value="Center" />
+   <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.primary">
+   <Setter Property="Background" Value="{StaticResource Accent}" />
+   <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+   <Setter Property="Background" Value="#4442CA" />
+   <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+   <Setter Property="Background" Value="#3735AF" />
+   <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="TextBox">
+   <Setter Property="Padding" Value="12,10" />
+   <Setter Property="CornerRadius" Value="6" />
+   <Setter Property="BorderBrush" Value="#DCE0E9" />
+   <Setter Property="Background" Value="#FBFCFE" />
+   <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ListBoxItem">
+   <Setter Property="Padding" Value="8,7" />
+   <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+  </Style>
+ </Application.Styles>
+</Application>

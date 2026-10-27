@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexImages", "App\YandexImages.csproj", "{55B574A5-E184-49A4-8650-28DBD3D938F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexImages.Core", "Core\YandexImages.Core.csproj", "{A92C0C08-F7CB-4E15-9105-22B68629D931}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexImages.Tests", "Tests\YandexImages.Tests.csproj", "{498F027E-BBF1-4939-9404-4BAE9CE2C91E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexImages.Verification", "Verification\YandexImages.Verification.csproj", "{BC83DA95-3D87-44AA-BCB7-67214B08C3D0}"
+EndProject
+Global
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {55B574A5-E184-49A4-8650-28DBD3D938F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {55B574A5-E184-49A4-8650-28DBD3D938F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {55B574A5-E184-49A4-8650-28DBD3D938F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {55B574A5-E184-49A4-8650-28DBD3D938F2}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A92C0C08-F7CB-4E15-9105-22B68629D931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A92C0C08-F7CB-4E15-9105-22B68629D931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A92C0C08-F7CB-4E15-9105-22B68629D931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A92C0C08-F7CB-4E15-9105-22B68629D931}.Release|Any CPU.Build.0 = Release|Any CPU
+        {498F027E-BBF1-4939-9404-4BAE9CE2C91E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {498F027E-BBF1-4939-9404-4BAE9CE2C91E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {498F027E-BBF1-4939-9404-4BAE9CE2C91E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {498F027E-BBF1-4939-9404-4BAE9CE2C91E}.Release|Any CPU.Build.0 = Release|Any CPU
+        {BC83DA95-3D87-44AA-BCB7-67214B08C3D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {BC83DA95-3D87-44AA-BCB7-67214B08C3D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {BC83DA95-3D87-44AA-BCB7-67214B08C3D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {BC83DA95-3D87-44AA-BCB7-67214B08C3D0}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+EndGlobal

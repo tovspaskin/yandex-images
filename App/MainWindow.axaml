@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ x:Class="YandexImages.MainWindow"
+ Title="Яндекс Фото — загрузка изображений" Width="1040" Height="850" MinWidth="780" MinHeight="540"
+ WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+ <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+ <Grid Margin="28,22" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+  <Grid Margin="0,0,0,22" ColumnDefinitions="*,Auto">
+   <StackPanel>
+    <TextBlock Text="ЯНДЕКС ФОТО" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Accent}" Margin="0,0,0,5" />
+    <TextBlock Text="Скачать изображения" FontSize="30" FontWeight="SemiBold" />
+    <TextBlock Text="Все фотографии из папки Яндекс Диска — в оригинальном качестве." Foreground="{StaticResource Muted}" Margin="0,7,0,0" TextWrapping="Wrap" />
+   </StackPanel>
+   <Border Grid.Column="1" CornerRadius="15" Background="#E8E7FF" Width="64" Height="64" VerticalAlignment="Center" Margin="16,0,0,0">
+    <Viewbox Width="30" Height="30"><Canvas Width="24" Height="24">
+     <Path Data="M 4,3 L 20,3 L 20,17 L 4,17 Z M 4,13 L 9,8 L 14,13 L 17,10 L 20,13 M 12,14 L 12,23 M 8,19 L 12,23 L 16,19" Stroke="#5452DC" StrokeThickness="1.7" StrokeJoin="Round" />
+    </Canvas></Viewbox>
+   </Border>
+  </Grid>
+
+  <Border Grid.Row="1" Background="White" BorderBrush="#E4E7EF" BorderThickness="1" CornerRadius="14" Padding="22" Margin="0,0,0,16">
+   <StackPanel>
+    <TextBlock Text="Ссылка на папку" FontWeight="SemiBold" Margin="0,0,0,8" />
+    <Grid ColumnDefinitions="*,Auto">
+     <TextBox x:Name="SourceBox" AutomationProperties.Name="Ссылка на папку" PlaceholderText="https://disk.360.yandex.ru/d/…" ToolTip.Tip="Публичная ссылка Яндекс Диска или Яндекс 360, включая вложенную папку." />
+     <Button x:Name="PasteButton" Grid.Column="1" Content="Вставить" Margin="10,0,0,0" Click="Paste_Click" />
+    </Grid>
+    <TextBlock Text="Яндекс Диск и Яндекс 360 · обычные ссылки и /client/aa/d_…" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,7,0,16" TextWrapping="Wrap" />
+    <TextBlock Text="Куда сохранить" FontWeight="SemiBold" Margin="0,0,0,8" />
+    <Grid ColumnDefinitions="*,Auto">
+     <TextBox x:Name="DestinationBox" AutomationProperties.Name="Папка сохранения" />
+     <Button x:Name="BrowseButton" Grid.Column="1" Content="Выбрать…" Margin="10,0,0,0" Click="Browse_Click" />
+    </Grid>
+    <Grid Margin="0,17,0,0" ColumnDefinitions="*,Auto,Auto">
+     <CheckBox x:Name="RecursiveBox" Content="Включая вложенные папки" IsChecked="True" VerticalAlignment="Center" />
+     <TextBlock Grid.Column="1" Text="Одновременно" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="16,0,10,0" />
+     <ComboBox x:Name="ParallelBox" Grid.Column="2" SelectedIndex="1" Width="65" Padding="7,4" VerticalContentAlignment="Center" AutomationProperties.Name="Количество одновременных загрузок">
+      <ComboBoxItem Content="2" /><ComboBoxItem Content="4" /><ComboBoxItem Content="6" /><ComboBoxItem Content="8" />
+     </ComboBox>
+    </Grid>
+   </StackPanel>
+  </Border>
+
+  <Grid Grid.Row="2" Margin="0,0,0,14" ColumnDefinitions="*,Auto,Auto">
+   <Button x:Name="CheckButton" Content="Проверить папку" Click="Check_Click" HorizontalAlignment="Left" Background="#E7E8F2" />
+   <Button x:Name="CancelButton" Grid.Column="1" Content="Остановить" IsEnabled="False" Margin="0,0,10,0" Click="Cancel_Click" />
+   <Button x:Name="DownloadButton" Grid.Column="2" Content="Скачать изображения" Classes="primary" MinWidth="220" Click="Download_Click" />
+  </Grid>
+
+  <Border Grid.Row="3" CornerRadius="14" BorderBrush="#E4E7EF" BorderThickness="1" Background="White" Padding="18,14" Height="225">
+   <Grid RowDefinitions="Auto,Auto,*">
+    <Grid Margin="0,0,0,10" ColumnDefinitions="*,Auto">
+     <TextBlock Text="Изображения" FontWeight="SemiBold" />
+     <TextBlock x:Name="SummaryText" Grid.Column="1" Text="Папка ещё не проверена" Foreground="{StaticResource Muted}" FontSize="12" VerticalAlignment="Center" />
+    </Grid>
+    <Grid Grid.Row="1" ColumnDefinitions="*,180,100" Margin="8,0,16,6">
+     <TextBlock Text="Имя файла" FontSize="12" Foreground="{StaticResource Muted}" />
+     <TextBlock Grid.Column="1" Text="Подпапка" FontSize="12" Foreground="{StaticResource Muted}" />
+     <TextBlock Grid.Column="2" Text="Размер" FontSize="12" Foreground="{StaticResource Muted}" />
+    </Grid>
+    <ListBox x:Name="FilesList" Grid.Row="2" Background="White" BorderThickness="0" SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+     <ListBox.ItemTemplate><DataTemplate>
+      <Grid ColumnDefinitions="*,180,100">
+       <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" Margin="0,0,8,0" ToolTip.Tip="{Binding Name}" />
+       <TextBlock Grid.Column="1" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" Margin="0,0,8,0" ToolTip.Tip="{Binding Folder}" />
+       <TextBlock Grid.Column="2" Text="{Binding Size}" />
+      </Grid>
+     </DataTemplate></ListBox.ItemTemplate>
+    </ListBox>
+    <TextBlock x:Name="EmptyText" Grid.Row="2" Text="Вставьте ссылку и нажмите «Проверить папку» или «Скачать изображения»." TextWrapping="Wrap" Foreground="{StaticResource Muted}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,10" IsHitTestVisible="False" />
+   </Grid>
+  </Border>
+
+  <StackPanel Grid.Row="4" Margin="0,16,0,0">
+   <Grid Margin="0,0,0,8" ColumnDefinitions="*,Auto">
+    <TextBlock x:Name="StatusText" Text="Готово к работе" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+    <Button x:Name="OpenButton" Grid.Column="1" Content="Открыть папку" Padding="13,7" Margin="12,0,0,0" Click="Open_Click" />
+   </Grid>
+   <ProgressBar x:Name="DownloadProgress" Height="7" BorderThickness="0" Background="#E3E5EF" Foreground="{StaticResource Accent}" Minimum="0" Maximum="100" />
+   <TextBlock x:Name="DetailText" Text="Готовые файлы пропускаются. Файлы с другим содержимым сохраняются рядом." FontSize="12" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,8,0,0" />
+   <TextBox x:Name="ErrorBox" IsVisible="False" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Height="75" Background="#FFF0EF" Foreground="#A13B36" BorderThickness="0" Margin="0,10,0,0" AutomationProperties.Name="Сообщения об ошибках" />
+  </StackPanel>
+ </Grid>
+ </ScrollViewer>
+</Window>
